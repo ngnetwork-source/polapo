@@ -1,0 +1,173 @@
+<html>
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-135255146-1"></script>
+    <script>window.dataLayer = window.dataLayer || []; function gtag() { dataLayer.push(arguments); } gtag('js', new Date()); gtag('config', 'UA-135255146-1');</script>
+    <title>Geometry Dash Comment Generator</title>
+    <link href="https://gdcolon.com/tools/assets/generate.css" type="text/css" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta property="og:description" content="Make your own Geometry Dash comments! (I am so sorry)">
+    <meta property="og:title" content="Geometry Dash Comment Generator">
+    <meta property="og:type" content="website">
+    <meta name="og:image" itemprop="image" content="https://gdcolon.com/tools/assets/colon.png">
+    <meta name="theme-color" content="#CCFF55">
+    <link rel="icon" href="https://gdcolon.com/tools/assets/colon.png">
+</head>
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.js"></script>
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.js"></script>
+<body>
+<div class="center"><br>
+    <img src="https://gdcolon.com/tools/assets/commentgenerator.png" id="logo" width=30%><br>
+    <p class="white" id="slogan"></p>
+    <div class="center generate hidden">
+        <h2>Generate a customizable Geometry Dash comment!</h2>
+        <br>
+        <textarea id="textboxinput" placeholder="Comment text" maxlength='200'></textarea>
+        <br><br>
+
+        <div class="configbox"><p>Username / Icon</p><input id="c-username" autocomplete="off" placeholder="Username" maxlength=25><br></div>
+        <div class="configbox"><p>Likes</p><input id="c-likes" type="number" autocomplete="off" placeholder="0" min="-99999" max="99999"><br></div>
+        <div class="configbox"><p>Percentage</p><input id="c-percent" type="number" placeholder="(don't show)" autocomplete="off" min="-999" max="999"><br></div>
+        <br>
+
+        <div class="configbox"><p>Color</p><select id="c-color" style="text-transform: none;">
+            <option value="white">White (default)</option>
+            <option value="yellow">Yellow (level author)</option>
+            <option value="lightgreen">Light Green (mod)</option>
+            <option value="green">Green (elder mod)</option>
+            <option value="blue">Blue (RobTop)</option></select></div>
+        <div class="configbox"><p>Mod Badge</p><select id="c-mod" style="text-transform: none;">
+            <option value="none">None</option>
+            <option value="mod">Moderator</option>
+            <option value="elder">Elder Moderator</option>
+        </select></div>
+
+        <div style="width: 250px; display: inline-block;">
+        <p style="margin-bottom: 7px;">Date</p>
+        <div class="configbox" style="width: 70px"><input id="c-days" type="number" autocomplete="off" placeholder="1" min="-9999" max="9999"><br></div>
+        <div class="configbox" id="unitDiv" style="width: 135px; margin-left: -5px;" ><select id="c-unit">
+            <option value="second">Seconds</option>
+            <option value="minute">Minutes</option>
+            <option value="hour">Hours</option>
+            <option value="day" selected>Days</option>
+            <option value="week">Weeks</option>
+            <option value="month">Months</option>
+            <option value="year">Years</option>
+        </select></div>
+        <div class="configbox" style="width: 20px"><p class="small" style="margin-top: 3px;;">ago</p></div></div>
+
+        <br><br><input type="checkbox" style="margin-bottom: 0" id="uhdFont">
+        <p class="inline">Use UHD font</p><br>
+        <br><input type="checkbox" style="margin-bottom: 0" id="showDelete">
+        <p class="inline">Show delete button</p><br>
+        <br><input type="checkbox" style="margin-bottom: 0" id="customIcon">
+        <p class="inline">Use custom icon</p><br><br>
+
+        <div id="customIconDiv" class="subdiv">
+        <div class="configbox" style="width: 400px;"><p>Custom Icon</p><input id="c-customIcon" autocomplete="off" placeholder="GD username OR icon URL"><br></div><br>
+        <p class="small" style="margin-bottom: 0">Enter a GD username or <a target="_blank" href="https://gdbrowser.com/iconkit">generate an icon here</a> and paste the URL in the box above</p>
+        <p class="smaller" style="margin-top: 8px">(<b>right click</b> the green download button on the site to copy the link)</p></div>
+
+        <br><button id="generate">Generate!</button>
+        <p id="progress"></p>
+        <img id="wheel" class="spin" src="https://gdcolon.com/tools/assets/loading.png" width="40px">
+        <br><br><img id="result" width=75%>
+        <h3 class="noMargin">Try out my <a href="./">other tools</a>!</h3>
+    </div>
+</div>
+<script type="text/javascript">
+
+$('.hidden').show();
+$('#customIconDiv').hide();
+$('#wheel').hide();
+
+let mobile =  /Android|webOS|iPhone|iPad|iPod|BlackBerry/i.test(navigator.userAgent)
+let name
+
+if (mobile) {
+    $('#logo').attr('width', '80%');
+    $('#textboxinput').css('width', '80%');
+    $('#unitDiv').css('margin-left', '0');
+    $('.configbox').css('width', '75%');
+    $('.configbox input, .configbox select').css('width', '80%');
+    $('.configbox').css('display', 'inline');
+    $('.generate').css('width', '95%');
+}
+
+let slogans = [ //yep, these are all the messages under the logo. now you don't need to spam refresh!
+    'It would have costed me $0 not to make this',
+    'I have sinned',
+    'Apologies in advance',
+    'You are heck map',
+    'Why did I think this would be a good idea?',
+    'Because God gave up on us a long time ago',
+    'Use responsibly',
+    'RobTop is watching us and he is disappointed',
+    'My disappointment is immeasurable and my day is ruined',
+    'RobTop said WHAT???!!!',
+    'I am very very very very very sorry for this',
+    'You have every right to be afraid',
+    'Exactly what it looks like',
+    'Forgive me for this',
+    'This is why we can\'t have good things',
+    'Oh dear...',
+    'This aint it, chief',
+    'A humongous yikes from me',
+    'walter']
+
+    $('#slogan').text(slogans[Math.floor(Math.random()*slogans.length)])
+
+    $("#generate").click(function () {
+
+        if (!($('#textboxinput').val())) return $("#textboxinput").effect("shake", {distance:10});
+        let url = 'https://gdcolon.com/tools/gdcomment/img/' + encodeURIComponent($('#textboxinput').val().replace(/\//, "%2F"))
+        let days = ($('#c-days').val() || "1") + '-' + $('#c-unit').val()
+
+        $("#progress").text("Loading...")
+        $('#wheel').show();
+       
+        url += '?name=' + ($('#c-username').val() || "Username")
+        if ($('#c-likes').val()) url += '&likes=' + $('#c-likes').val()
+        if ($('#c-percent').val()) url += '&%=' + $('#c-percent').val()
+        if ($('#c-color').val() != "white") url += '&color=' + $('#c-color').val()
+        if ($('#c-mod').val() != "none") url += '&mod=' + ($('#c-mod').val())
+        if (days != "1-day") url += '&days=' + days
+        if ($('#uhdFont').prop('checked')) url += "&uhd"
+        if ($('#showDelete').prop('checked')) url += "&deletable"
+        if ($('#c-customIcon').val() && $('#customIcon').prop('checked')) url += '&customIcon=' + encodeURIComponent($('#c-customIcon').val())
+
+        $("#result").attr('src', url)
+    });
+
+    $("#result").on('load', function () {
+        $("#result").show()
+        $('#wheel').hide();
+        $("#progress").text("")
+    })
+
+    $("#result").on('error', function () {
+        $("#progress").text("Something went wrong! (try again)")
+        $('#wheel').hide();
+        $("#result").hide()
+    });
+
+    $('#customIcon').change(function(){
+        if ($(this).prop('checked')) $('#customIconDiv').slideToggle(200);
+        else $('#customIconDiv').slideToggle(200)})
+
+    $('input[type=number]').on('input', function () {
+            var x = $(this).val();
+            var max = $(this).attr('max');
+            var min = $(this).attr('min');
+            if ($(this).val() != "") $(this).val(Math.max(Math.min(Math.floor(x), max), min));
+        });
+
+        $('input[type=number]').on('blur', function () {
+            var x = $(this).val();
+            var max = $(this).attr('max');
+            var min = $(this).attr('min');
+            if ($(this).val() != "") $(this).val(Math.max(Math.min(Math.floor(x), max), min));
+        });
+
+</script>
+    </body>
+</html>
